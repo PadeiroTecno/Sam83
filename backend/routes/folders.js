@@ -263,7 +263,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const folderId = req.params.id;
     const userId = req.user.id;
-    const userLogin = req.user.usuario || req.user.email?.split('@')[0] || `user_${userId}`;
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
 
     // Verificar se a pasta pertence ao usuário
     const [folderRows] = await db.execute(

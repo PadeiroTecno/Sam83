@@ -47,7 +47,7 @@ router.get('/proxy-stream/:videoId', async (req, res) => {
     }
 
     // Verificar se o caminho pertence ao usuário (nova estrutura)
-    const userLogin = decoded.email ? decoded.email.split('@')[0] : `user_${decoded.userId}`;
+    const userLogin = decoded.usuario || (decoded.email ? decoded.email.split('@')[0] : `user_${decoded.userId}`);
     if (!remotePath.includes(`/home/streaming/${userLogin}/`) && !remotePath.includes(`streaming/${userLogin}/`)) {
       return res.status(403).json({ error: 'Acesso negado ao vídeo' });
     }
@@ -203,7 +203,7 @@ router.get('/proxy-stream/:videoId', async (req, res) => {
 router.get('/list', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
-    const userLogin = req.user.email ? req.user.email.split('@')[0] : `user_${userId}`;
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
     const folderName = req.query.folder;
 
     if (!folderName) {
@@ -300,7 +300,7 @@ router.get('/stream/:videoId', async (req, res) => {
     }
 
     const user = userRows[0];
-    const userLogin = user.email ? user.email.split('@')[0] : `user_${user.codigo}`;
+    const userLogin = user.usuario || (user.email ? user.email.split('@')[0] : `user_${user.codigo}`);
 
     // Decodificar videoId (base64)
     let remotePath;
@@ -478,7 +478,7 @@ router.get('/info/:videoId', authMiddleware, async (req, res) => {
   try {
     const videoId = req.params.videoId;
     const userId = req.user.id;
-    const userLogin = req.user.email ? req.user.email.split('@')[0] : `user_${userId}`;
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
 
     // Decodificar videoId
     let remotePath;
@@ -530,7 +530,7 @@ router.delete('/:videoId', authMiddleware, async (req, res) => {
   try {
     const videoId = req.params.videoId;
     const userId = req.user.id;
-    const userLogin = req.user.email ? req.user.email.split('@')[0] : `user_${userId}`;
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
 
     // Decodificar videoId
     let remotePath;
@@ -627,7 +627,7 @@ router.delete('/:videoId', authMiddleware, async (req, res) => {
 router.post('/sync-database', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
-    const userLogin = req.user.email ? req.user.email.split('@')[0] : `user_${userId}`;
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
     const { folderId } = req.body;
 
     if (!folderId) {
@@ -794,7 +794,7 @@ router.put('/:videoId/rename', authMiddleware, async (req, res) => {
     const videoId = req.params.videoId;
     const { novo_nome } = req.body;
     const userId = req.user.id;
-    const userLogin = req.user.email ? req.user.email.split('@')[0] : `user_${userId}`;
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
 
     if (!novo_nome) {
       return res.status(400).json({ error: 'Novo nome é obrigatório' });
@@ -889,7 +889,7 @@ router.put('/rename-by-path/:videoId', authMiddleware, async (req, res) => {
     const videoId = req.params.videoId;
     const { novo_nome } = req.body;
     const userId = req.user.id;
-    const userLogin = req.user.email ? req.user.email.split('@')[0] : `user_${userId}`;
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
 
     if (!novo_nome) {
       return res.status(400).json({ error: 'Novo nome é obrigatório' });

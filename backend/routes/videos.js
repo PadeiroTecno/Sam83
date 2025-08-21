@@ -377,7 +377,7 @@ router.post('/upload', authMiddleware, upload.single('video'), async (req, res) 
     }
 
     const userId = req.user.id;
-    const userLogin = req.user.email.split('@')[0];
+    const userLogin = req.user.usuario || (req.user.email ? req.user.email.split('@')[0] : `user_${userId}`);
     const folderId = req.query.folder_id || 'default';
 
     console.log(`📤 Upload iniciado - Usuário: ${userLogin}, Pasta: ${folderId}, Arquivo: ${req.file.originalname}`);
