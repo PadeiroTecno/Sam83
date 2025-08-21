@@ -21,6 +21,11 @@ const DashboardLayout: React.FC = () => {
   const { user, logout, getToken } = useAuth();
   const location = useLocation();
 
+  // Função para obter login do usuário de forma consistente
+  const getUserLogin = () => {
+    return user?.usuario || (user?.email ? user.email.split('@')[0] : `user_${user?.id || 'usuario'}`);
+  };
+
   // Menu items padrão
   const defaultMenuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: 'Home', visible: true, order: 0, category: 'system' },
